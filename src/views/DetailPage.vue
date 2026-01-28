@@ -68,7 +68,6 @@ const fetchPost = async () => {
   } catch (err) {
     console.error('Error fetching post:', err)
     
-    // Fallback to JSONPlaceholder
     try {
       const postId = props.id || route.params.id
       const fallbackResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`)
