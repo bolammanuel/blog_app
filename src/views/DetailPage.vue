@@ -12,7 +12,7 @@
           ← Back
         </button>
         <router-link to="/" class="nav-btn">
-          🏠 Home
+          < Home
         </router-link>
       </div>
 
