@@ -5,7 +5,7 @@
       <h2>Page Not Found</h2>
       <p>The page you're looking for doesn't exist.</p>
       <router-link to="/" class="home-btn">
-        🏠 Go Home
+        𖠿 Go Home
       </router-link>
     </div>
   </div>

@@ -12,7 +12,7 @@
           ← Back
         </button>
         <router-link to="/" class="nav-btn">
-          < Home
+          𖠿 Home
         </router-link>
       </div>
 
@@ -120,7 +120,7 @@ watch(() => route.params.id, (newId) => {
 
 .nav-btn {
   background: white;
-  color: #374151;
+  color: #0000;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
