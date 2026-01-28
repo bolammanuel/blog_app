@@ -20,14 +20,12 @@
         <header class="article-header">
           <h1>{{ post.title }}</h1>
           <div class="meta">
-            <span>Post #{{ post.id }}</span>
-            <span>•</span>
-            <span>User ID: {{ post.userId }}</span>
+            <span>{{ formatDate(post.created_at || post.createdAt) }}</span>
           </div>
         </header>
 
         <div class="article-body">
-          <p>{{ post.body }}</p>
+          <p>{{ post.content || post.body || 'No content available' }}</p>
         </div>
       </article>
     </div>
@@ -35,18 +33,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import LoadingSpinner from '../components/LoadingSpinner.vue'
 import NotFound from './NotFound.vue'
-
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
 
 const route = useRoute()
 const router = useRouter()
@@ -58,23 +49,41 @@ const goBack = () => {
   router.go(-1)
 }
 
+const formatDate = (date) => {
+  if (!date) return 'Recently published'
+  return new Date(date).toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })
+}
+
 const fetchPost = async () => {
   try {
     loading.value = true
-    const postId = props.id || route.params.id
+    const postId = route.params.id
     
-    const response = await axios.get(`https://api.oluwasetemi.dev/posts/${postId}`)
-    post.value = response.data
+    console.log('Fetching post with ID:', postId)
+    
+    if (!postId) {
+      console.error('No post ID found in route params')
+      post.value = null
+      loading.value = false
+      return
+    }
+    
+    const options = { 
+      method: 'GET', 
+      url: `https://api.oluwasetemi.dev/posts/${postId}` 
+    }
+    
+    const response = await axios.request(options)
+    console.log('Post data received:', response.data)
+    
+    post.value = response.data.data || response.data
   } catch (err) {
     console.error('Error fetching post:', err)
-    
-    try {
-      const postId = props.id || route.params.id
-      const fallbackResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`)
-      post.value = fallbackResponse.data
-    } catch (fallbackErr) {
-      post.value = null
-    }
+    post.value = null
   } finally {
     loading.value = false
   }
@@ -82,6 +91,12 @@ const fetchPost = async () => {
 
 onMounted(() => {
   fetchPost()
+})
+
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    fetchPost()
+  }
 })
 </script>
 
@@ -152,5 +167,6 @@ onMounted(() => {
   font-size: 1.125rem;
   line-height: 1.8;
   color: #374151;
+  white-space: pre-wrap;
 }
 </style>

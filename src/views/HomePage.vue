@@ -40,18 +40,28 @@ const fetchPosts = async () => {
     loading.value = true
     error.value = null
     
-    const response = await axios.get('https://api.oluwasetemi.dev/posts')
-    posts.value = response.data
+    const options = { 
+      method: 'GET', 
+      url: 'https://api.oluwasetemi.dev/posts' 
+    }
+    
+    const response = await axios.request(options)
+    console.log('API Response:', response.data)
+    
+    // The API returns { data: [...posts], meta: {...} }
+    if (response.data && Array.isArray(response.data.data)) {
+      posts.value = response.data.data
+    } else if (Array.isArray(response.data)) {
+      posts.value = response.data
+    } else {
+      console.warn('Unexpected data format:', response.data)
+      posts.value = []
+    }
+    
+    console.log('Posts loaded:', posts.value.length)
   } catch (err) {
     console.error('Error fetching posts:', err)
-    
-    // Fallback to JSONPlaceholder
-    try {
-      const fallbackResponse = await axios.get('https://jsonplaceholder.typicode.com/posts')
-      posts.value = fallbackResponse.data.slice(0, 20)
-    } catch (fallbackErr) {
-      error.value = 'Failed to load posts. Please try again.'
-    }
+    error.value = 'Failed to load posts. Please try again.'
   } finally {
     loading.value = false
   }

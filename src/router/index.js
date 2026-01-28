@@ -13,8 +13,7 @@ const routes = [
   {
     path: '/post/:id',
     name: 'detail',
-    component: DetailPage,
-    props: true
+    component: DetailPage
   },
   {
     path: '/:pathMatch(.*)*',

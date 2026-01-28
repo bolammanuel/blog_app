@@ -1,9 +1,9 @@
 <template>
   <div class="post-card">
-    <h3>{{ post.title }}</h3>
+    <h3>{{ post.title || 'Untitled Post' }}</h3>
     <p class="excerpt">{{ excerpt }}</p>
     <div class="card-footer">
-      <span class="post-id">Post #{{ post.id }}</span>
+      <span class="post-id">Post ID</span>
       <router-link :to="`/post/${post.id}`" class="read-more">
         Read More
       </router-link>
@@ -22,7 +22,9 @@ const props = defineProps({
 })
 
 const excerpt = computed(() => {
-  return props.post.body?.substring(0, 150) + '...' || 'No content available'
+  const text = props.post?.excerpt || props.post?.content || props.post?.body || ''
+  if (!text) return 'No content available'
+  return text.length > 150 ? text.substring(0, 150) + '...' : text
 })
 </script>
 
@@ -59,7 +61,7 @@ const excerpt = computed(() => {
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;
-    line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
