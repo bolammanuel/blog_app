@@ -5,7 +5,7 @@
     
     <div v-else class="container">
       <header class="header">
-        <h1>My Blog</h1>
+        <h1>Understanding Certain Topics in Front End Engineering</h1>
         <p>Discover amazing articles and stories</p>
       </header>
 
@@ -48,7 +48,6 @@ const fetchPosts = async () => {
     const response = await axios.request(options)
     console.log('API Response:', response.data)
     
-    // The API returns { data: [...posts], meta: {...} }
     if (response.data && Array.isArray(response.data.data)) {
       posts.value = response.data.data
     } else if (Array.isArray(response.data)) {
