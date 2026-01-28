@@ -120,7 +120,7 @@ watch(() => route.params.id, (newId) => {
 
 .nav-btn {
   background: white;
-  color: #0000;
+  color: #1f2937;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
